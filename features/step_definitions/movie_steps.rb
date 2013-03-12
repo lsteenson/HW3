@@ -63,28 +63,32 @@ When /^I have opted to see movies rated: "(.*?)"$/ do |rating_list|
   # HINT: use String#split to split up the rating_list, then
   # iterate over the ratings and check/uncheck the ratings
   # using the appropriate Capybara command(s)
-  ar = ['ratings_R', 'ratings_G', 'ratings_PG-13', 'ratings_PG']
-  ar.each do |aun|
-  	uncheck("#{aun}")
+  Movie.all_ratings.each do |all|
+  	all = "ratings_" + all
+  	uncheck(all)
   end
   rl = rating_list.split(', ')
   rl.each do |rt|
-  	check("ratings_#{rt}")
+  	rt = "ratings_" + rt
+  	check(rt)
   end
-  #flunk "Unimplemented"
 end
 
 Then /^I should see only movies rated "(.*?)"$/ do |ratings_list|
-	
-  flunk "Unimplemented" 
+	ratings = ratings_list.split(", ")
+	db_size = Movie.find(:all, :conditions => {:rating => ratings}).size
+	rows = page.all("table tr").count - 1
 end
 
 Then /^I should see all of the movies$/ do
-  flunk "Unimplemented"
+	db_size = Movie.all.size
+	rows = page.all("table tr").count - 1
+  rows.should == db_size
 end
 
 When /^I have opted to see movies listed by "(.*?)"$/ do |arg1|
-  
+	
+  pending
 end
 
 Then /^I should see movies listed by "(.*?)"$/ do |arg1|
