@@ -55,18 +55,27 @@ Given /the following movies have been added to RottenPotatoes:/ do |movies_table
     # The keys will be the table headers and the values will be the row contents.
     # You should arrange to add that movie to the database here.
     # You can add the entries directly to the databasse with ActiveRecord methodsQ
+    Movie.create!(movie)
   end
-  flunk "Unimplemented"
 end
 
-When /^I have opted to see movies rated: "(.*?)"$/ do |arg1|
+When /^I have opted to see movies rated: "(.*?)"$/ do |rating_list|
   # HINT: use String#split to split up the rating_list, then
   # iterate over the ratings and check/uncheck the ratings
   # using the appropriate Capybara command(s)
-  flunk "Unimplemented"
+  ar = ['ratings_R', 'ratings_G', 'ratings_PG-13', 'ratings_PG']
+  ar.each do |aun|
+  	uncheck("#{aun}")
+  end
+  rl = rating_list.split(', ')
+  rl.each do |rt|
+  	check("ratings_#{rt}")
+  end
+  #flunk "Unimplemented"
 end
 
-Then /^I should see only movies rated "(.*?)"$/ do |arg1|
+Then /^I should see only movies rated "(.*?)"$/ do |ratings_list|
+	
   flunk "Unimplemented" 
 end
 
@@ -74,5 +83,12 @@ Then /^I should see all of the movies$/ do
   flunk "Unimplemented"
 end
 
+When /^I have opted to see movies listed by "(.*?)"$/ do |arg1|
+  
+end
+
+Then /^I should see movies listed by "(.*?)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
 
 
