@@ -33,6 +33,8 @@ end
 
 gem 'jquery-rails'
 
+gem 'simplecov'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 

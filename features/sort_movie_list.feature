@@ -23,10 +23,10 @@ Background: movies have been added to database
 
 Scenario: sort movies alphabetically
   # your scenario here
-  When I have opted to see movies listed by "title"
-  Then I should see movies listed by "title"
+  When I have opted to see "Aladdin" before "Amelie"
+  Then I should see "Aladdin" before "Amelie"
 
 Scenario: sort movies in increasing order of release date
   # your scenario here
-  When I have opted to see movies listed by "date"
-  Then I should see movies listed by "date"
+  When I have opted to see "Chocolat" before "Amelie"
+  Then I should see "Chocolat" before "Amelie"

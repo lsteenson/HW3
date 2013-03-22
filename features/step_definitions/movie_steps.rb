@@ -86,13 +86,23 @@ Then /^I should see all of the movies$/ do
   rows.should == db_size
 end
 
-When /^I have opted to see movies listed by "(.*?)"$/ do |arg1|
-	
-  pending
+When /^I have opted to see "(.*?)" before "(.*?)"$/ do |arg1, arg2|
+  click_link('title_header')
+  first = page.body.split(arg1,2)
+  second = page.body.split(arg2, 2)
+  fl = first[0].length
+  sl = second[0].length
+  if fl > sl
+    click_link('release_date_header')
+  end
 end
 
-Then /^I should see movies listed by "(.*?)"$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+Then /^I should see "(.*?)" before "(.*?)"$/ do |arg1, arg2|
+	first = page.body.split(arg1,2)
+  second = page.body.split(arg2, 2)
+  fl = first[0].length
+  sl = second[0].length
+  fl.should < sl
 end
 
 
