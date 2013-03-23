@@ -86,10 +86,10 @@ Then /^I should see all of the movies$/ do
   rows.should == db_size
 end
 
-When /^I have opted to see "(.*?)" before "(.*?)"$/ do |arg1, arg2|
+When /^I have opted to see "(.*?)" before "(.*?)"$/ do |movie1, movie2|
   click_link('title_header')
-  first = page.body.split(arg1,2)
-  second = page.body.split(arg2, 2)
+  first = page.body.split(movie1,2)
+  second = page.body.split(movie2, 2)
   fl = first[0].length
   sl = second[0].length
   if fl > sl
@@ -97,12 +97,76 @@ When /^I have opted to see "(.*?)" before "(.*?)"$/ do |arg1, arg2|
   end
 end
 
-Then /^I should see "(.*?)" before "(.*?)"$/ do |arg1, arg2|
-	first = page.body.split(arg1,2)
-  second = page.body.split(arg2, 2)
+Then /^I should see "(.*?)" before "(.*?)"$/ do |movie1, movie2|
+	first = page.body.split(movie1,2)
+  second = page.body.split(movie2, 2)
   fl = first[0].length
   sl = second[0].length
   fl.should < sl
 end
+
+
+
+When /^I have edited the movie "(.*?)" to change the director to "(.*?)"$/ do |title, director|
+  visit movies_path
+  click_on "More about #{title}"
+  click_on 'Edit'
+  fill_in 'Director', :with => director
+  click_button 'Update Movie Info' 
+end
+
+When /^I am on the Rotten Potatoes home page$/ do
+  visit movies_path
+end
+
+Then /^I should see a movie list entry with title "(.*?)" and director  "(.*?)"$/ do |title, director|
+  result=false
+    all("tr").each do |tr|
+      if tr.has_content?(director) && tr.has_content?(title)
+        result = true
+        break
+    end
+  end  
+  assert result
+end
+
+When /^I have opted to view movies with the same director$/ do
+  click_on "Find movies by same director"
+end
+
+Then /^I should see a movie list entry with title "(.*?)" and director "(.*?)"$/ do |title, director|
+  result=false
+    all("tr").each do |tr|
+      if tr.has_content?(director) && tr.has_content?(title)
+        result = true
+        break
+    end
+  end  
+  assert result
+end
+
+Then /^I should not see a movie list entry with title  "(.*?)" and director "(.*?)"$/ do |title, director|
+  result=true
+    all("tr").each do |tr|
+      if tr.has_content?(director) && tr.has_content?(title)
+        result = false
+        break
+    end
+  end  
+  assert result
+end
+
+Then /^I should not see "(.*?)"$/ do |director|
+  if page.respond_to? :should
+    page.should_not have_content(director)
+  else
+    assert !page.has_content?(director)
+  end
+end
+
+When /^I have opted to view movies by the same director$/ do
+  click_on "Find movies by same director"
+end
+
 
 

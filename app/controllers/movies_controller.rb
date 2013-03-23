@@ -8,6 +8,8 @@ class MoviesController < ApplicationController
 
   def index
     sort = params[:sort] || session[:sort]
+    director = params[:filter] || session[:filter]
+    title = params[:title] || session[:title]
     case sort
     when 'title'
       ordering,@title_header = {:order => :title}, 'hilite'
@@ -15,6 +17,7 @@ class MoviesController < ApplicationController
       ordering,@date_header = {:order => :release_date}, 'hilite'
     when 'director'
       ordering,@director_header = {:order => :director}, 'hilite'
+      
     end
     @all_ratings = Movie.all_ratings
     @selected_ratings = params[:ratings] || session[:ratings] || {}
@@ -23,12 +26,23 @@ class MoviesController < ApplicationController
       @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
     end
     
-    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
+    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings] or params[:filter] != session[:filter] or params[:title] != session[:title]
       session[:sort] = sort
       session[:ratings] = @selected_ratings
-      redirect_to :sort => sort, :ratings => @selected_ratings and return
+      session[:filter] = director
+      session[:title] = title
+      redirect_to :sort => sort, :ratings => @selected_ratings, :filter => director, :title => title and return
     end
     @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
+    
+    if director != ''
+      @movies = @movies.select { |x| x.director == director }
+    end
+    
+    if director == '' and !params[:title].nil?
+      flash[:notice] = "#{params[:title]} has no director."
+    end
+    
   end
 
   def new

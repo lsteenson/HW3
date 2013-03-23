@@ -7,6 +7,9 @@
     Rating:
     = @movie.rating
   %li
+    Director:
+    = @movie.director
+  %li
     Released on:
     = @movie.release_date.strftime("%B %d, %Y")
 
@@ -14,6 +17,7 @@
 
 %p#description= @movie.description
 
+= link_to 'Find movies by same director', movies_path( :filter => @movie.director, :title => @movie.title)
 = link_to 'Edit', edit_movie_path(@movie)
 = button_to 'Delete', movie_path(@movie), :method => :delete, :confirm => 'Are you sure?'
 = link_to 'Back to movie list', movies_path
