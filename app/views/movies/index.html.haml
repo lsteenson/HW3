@@ -9,6 +9,7 @@
     = rating
     = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating), :id => "ratings_#{rating}"
   = submit_tag 'Refresh', :id => 'ratings_submit'
+  = link_to 'Remove all filtering', movies_path(:remove => 'yes')
 
 %table#movies
   %thead
@@ -25,6 +26,6 @@
         %td= movie.rating
         %td= movie.director
         %td= movie.release_date
-        %td= link_to "More about #{movie.title}", movie_path(movie)
+        %td= link_to "More about #{movie.title}", movie_path(movie), :action => :show
 
 = link_to 'Add new movie', new_movie_path

@@ -7,9 +7,11 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if params[:remove]
+      session.clear
+      params.clear
+    end
     sort = params[:sort] || session[:sort]
-    director = params[:filter] || session[:filter]
-    title = params[:title] || session[:title]
     case sort
     when 'title'
       ordering,@title_header = {:order => :title}, 'hilite'
@@ -26,23 +28,13 @@ class MoviesController < ApplicationController
       @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
     end
     
-    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings] or params[:filter] != session[:filter] or params[:title] != session[:title]
+    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
       session[:sort] = sort
       session[:ratings] = @selected_ratings
-      session[:filter] = director
-      session[:title] = title
-      redirect_to :sort => sort, :ratings => @selected_ratings, :filter => director, :title => title and return
+      flash.keep
+      redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
     @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
-    
-    if director != ''
-      @movies = @movies.select { |x| x.director == director }
-    end
-    
-    if director == '' and !params[:title].nil?
-      flash[:notice] = "#{params[:title]} has no director."
-    end
-    
   end
 
   def new
@@ -64,6 +56,15 @@ class MoviesController < ApplicationController
     @movie.update_attributes!(params[:movie])
     flash[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
+  end
+  
+  def sorted
+    movie = Movie.find(params[:id])
+    @movies = Movie.find_all_by_director(movie.director)
+    if movie.director == ''
+      flash[:notice] = "#{movie.title} has no director."
+      redirect_to movies_path
+    end
   end
 
   def destroy
