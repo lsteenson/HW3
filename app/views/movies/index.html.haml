@@ -9,14 +9,13 @@
     = rating
     = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating), :id => "ratings_#{rating}"
   = submit_tag 'Refresh', :id => 'ratings_submit'
-  = link_to 'Remove all filtering', movies_path(:remove => 'yes')
 
 %table#movies
   %thead
     %tr
       %th{:class => @title_header}= link_to 'Movie Title', movies_path(:sort => 'title', :ratings => @selected_ratings), :id => 'title_header'
       %th Rating
-      %th{:class => @director_header}= link_to 'Director', movies_path(:sort => 'director', :ratings => @selected_ratings), :id => 'director_header'
+      %th Director
       %th{:class => @date_header}= link_to 'Release Date', movies_path(:sort => 'release_date', :ratings => @selected_ratings), :id => 'release_date_header'
       %th More Info
   %tbody

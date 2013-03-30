@@ -15,11 +15,11 @@ group :development, :test do
   gem 'rspec-rails'
 end
 group :test do
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', :require => false
   gem 'cucumber-rails-training-wheels'
 end
 group :production do
-#  gem 'pg'
+  gem 'pg'
 end
 
 # Gems used only for assets and not required
@@ -33,7 +33,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'simplecov'
+gem 'simplecov', :require => false
 
 # Use unicorn as the web server
 # gem 'unicorn'
