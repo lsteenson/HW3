@@ -55,7 +55,7 @@ class MoviesController < ApplicationController
   def sorted
     movie = Movie.find(params[:id])
     @movies = Movie.find_all_by_director(movie.director)
-    if movie.director == ''
+    if movie.director == '' or !movie.director
       flash[:notice] = "#{movie.title} has no director."
       redirect_to movies_path
     end
